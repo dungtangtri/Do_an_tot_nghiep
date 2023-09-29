@@ -1,13 +1,15 @@
 package com.dung.spring.application.models;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Data
+@NoArgsConstructor
 @Entity
-@Table(name = "myorder")
+@Table(name = "Order_Detail")
 public class OrderModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,17 +17,19 @@ public class OrderModel {
 
     private String orderDescription;
 
-    @OneToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "customer_id", referencedColumnName = "id")
-    private CustomerModel customer;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private User user;
 
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, targetEntity = ShoppingCartModel.class)
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private List<ShoppingCartModel> cartItems;
-    public OrderModel(String orderDescription, CustomerModel customer, List<ShoppingCartModel> cartItems) {
+
+
+    public OrderModel(String orderDescription, User user , List<ShoppingCartModel> cartItems){
         this.orderDescription = orderDescription;
-        this.customer = customer;
+        this.user = user;
         this.cartItems = cartItems;
     }
 }
