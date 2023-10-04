@@ -6,7 +6,6 @@ import com.dung.spring.application.models.ShoppingCartModel;
 import com.dung.spring.application.repository.OrderRepository;
 import com.dung.spring.application.repository.ProductRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -23,7 +22,7 @@ public class OrderService {
 
     public OrderModel getOrderDetail(int orderId) {
         Optional<OrderModel> order = this.orderRepository.findById(orderId);
-        return order.isPresent() ? order.get() : null;
+        return order.orElse(null);
     }
 
     public float getCartAmount(List<ShoppingCartModel> shoppingCartList) {
@@ -56,7 +55,7 @@ public class OrderService {
         return totalCartAmount;
     }
 
-    public OrderModel saveOrder(OrderModel order) {
-        return orderRepository.save(order);
+    public void saveOrder(OrderModel order) {
+        orderRepository.save(order);
     }
 }

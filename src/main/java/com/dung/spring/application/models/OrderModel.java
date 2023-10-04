@@ -1,9 +1,11 @@
 package com.dung.spring.application.models;
 
+import com.dung.spring.application.util.DateUtil;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -17,9 +19,13 @@ public class OrderModel {
 
     private String orderDescription;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(name = "username")
+    private String username;
+
+    private String email;
+    private String customerName;
+    @Column(name = "creation_time")
+    private LocalDateTime create_time;
 
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, targetEntity = ShoppingCartModel.class)
@@ -27,9 +33,12 @@ public class OrderModel {
     private List<ShoppingCartModel> cartItems;
 
 
-    public OrderModel(String orderDescription, User user , List<ShoppingCartModel> cartItems){
+    public OrderModel(String orderDescription, String username, String email, String customerName, List<ShoppingCartModel> cartItems, LocalDateTime create_time) {
         this.orderDescription = orderDescription;
-        this.user = user;
+        this.username = username;
+        this.email = email;
+        this.customerName = customerName;
         this.cartItems = cartItems;
+        this.create_time = create_time;
     }
 }

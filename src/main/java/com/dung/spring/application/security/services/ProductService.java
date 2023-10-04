@@ -8,7 +8,6 @@ import java.util.List;
 
 @Service
 public class ProductService {
-
     private ProductRepository productRepository;
 
     public ProductService(ProductRepository productRepository) {
@@ -17,5 +16,11 @@ public class ProductService {
 
     public List<ProductModel> getAllProducts() {
         return this.productRepository.findAll();
+    }
+     public void addProduct(ProductModel productModel){
+         this.productRepository.save(productModel);
+     }
+    public void deleteProduct(Integer id){
+         this.productRepository.deleteById(id);
     }
 }
