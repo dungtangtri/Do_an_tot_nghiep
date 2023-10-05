@@ -9,6 +9,7 @@ import com.dung.spring.application.util.DateUtil;
 import com.sun.istack.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,7 +23,9 @@ import java.util.Random;
 @RequestMapping("/api")
 
 public class ShoppingCartController {
+        @Autowired
         private OrderService orderService;
+        @Autowired
         private ProductService productService;
         public ShoppingCartController() {
 
@@ -41,22 +44,18 @@ public class ShoppingCartController {
         public ResponseEntity<ResponseOrderDTO> placeOrder(
                 @AuthenticationPrincipal UserDetailsImpl user,
                 @NotNull @RequestBody OrderDTO orderDTO) {
-            logger.info("Request Payload " + orderDTO.toString());
             ResponseOrderDTO responseOrderDTO = new ResponseOrderDTO();
             float amount = orderService.getCartAmount(orderDTO.getCartItems());
             if(user != null){
                 LocalDateTime create_time = LocalDateTime.now();
                 OrderModel newOrder = new OrderModel(orderDTO.getOrderDescription(), user.getUsername(), orderDTO.getCustomerEmail(),orderDTO.getCustomerName(),orderDTO.getCartItems(), create_time);
                 orderService.saveOrder(newOrder);
-                logger.info("Order processed successfully..");
+                logger.info("Order processed successfully.");
                 responseOrderDTO.setAmount(amount);
                 responseOrderDTO.setDate(DateUtil.getCurrentDateTime());
-                responseOrderDTO.setInvoiceNumber(new Random().nextInt(1000));
                 responseOrderDTO.setOrderId(newOrder.getId());
                 responseOrderDTO.setOrderDescription(orderDTO.getOrderDescription());
             }
-            logger.info("test push..");
-
             return ResponseEntity.ok(responseOrderDTO);
         }
 

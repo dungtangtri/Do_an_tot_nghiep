@@ -24,7 +24,7 @@ public class OrderModel {
 
     private String email;
     private String customerName;
-    @Column(name = "creation_time")
+    @Column(name = "create_time")
     private LocalDateTime create_time;
 
 
